@@ -390,7 +390,7 @@ function SystemNotices({ mint }) {
           <button className="secondary-button" onClick={mint.switchNetwork} type="button">Switch to {APP_CONFIG.chainName}</button>
         </div>
       ) : null}
-      {mint.client && mint.walletBalance <= mint.commitFee && mint.mintState !== MintState.Minted ? <p className="hidden notice">Add Sepolia ETH for the commit payment and gas before minting.</p> : null}
+      {mint.client && mint.walletBalance <= mint.commitFee && mint.mintState !== MintState.Minted ? <p className="hidden notice">Add ETH for the commit payment and gas before minting.</p> : null}
     </div>
   );
 }

@@ -2,7 +2,7 @@ export const APP_CONFIG = {
   backendUrl: import.meta.env.VITE_BACKEND_URL || "http://localhost:3001",
   contractAddress: import.meta.env.VITE_CONTRACT_ADDRESS || "",
   chainId: Number(import.meta.env.VITE_CHAIN_ID || 31337),
-  chainName: import.meta.env.VITE_CHAIN_NAME || "Sepolia",
+  chainName: import.meta.env.VITE_CHAIN_NAME || "Ethereum Mainnet",
   explorerTxUrl: import.meta.env.VITE_EXPLORER_TX_URL || "",
   marketplaceUrl: import.meta.env.VITE_MARKETPLACE_URL || "",
   maxSupply: Number(import.meta.env.VITE_MAX_SUPPLY || 0)

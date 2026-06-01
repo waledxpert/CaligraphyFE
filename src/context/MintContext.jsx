@@ -182,7 +182,7 @@ export class MintProvider extends React.Component {
     try {
       if (walletBalance < commitFee) {
         throw new Error(
-          `Insufficient Sepolia ETH. Commit needs ${ethers.formatEther(commitFee)} ETH plus gas, wallet has ${ethers.formatEther(walletBalance)} ETH.`
+          `Insufficient ETH. Commit needs ${ethers.formatEther(commitFee)} ETH plus gas, wallet has ${ethers.formatEther(walletBalance)} ETH.`
         );
       }
 
@@ -239,7 +239,7 @@ export class MintProvider extends React.Component {
       const mintPayment = mintPrice;
       if (walletBalance < mintPayment) {
         throw new Error(
-          `Insufficient Sepolia ETH. Mint needs ${ethers.formatEther(mintPayment)} ETH plus gas, wallet has ${ethers.formatEther(walletBalance)} ETH.`
+          `Insufficient ETH. Mint needs ${ethers.formatEther(mintPayment)} ETH plus gas, wallet has ${ethers.formatEther(walletBalance)} ETH.`
         );
       }
 
