@@ -170,9 +170,9 @@ class AppShell extends Component {
                 <WalletLedger mint={mint} />
                 <div className="grid gap-3 sm:grid-cols-2">
                   <Price label="Commit fee" value={mint.commitFee} />
-                  <Price label="Mint price each" value={mint.mintPrice} />
+                  <Price label="Mint price" value={mint.mintPrice} />
                   <Price label="Wallet balance" value={mint.walletBalance} />
-                  <Price label="Max mint payment" value={mint.mintPrice * 6n} />
+                  <Price label="Mint payment" value={mint.mintPrice} />
                 </div>
                 <button
                   className="primary-button"
@@ -467,7 +467,7 @@ function shapeError(message) {
   if (lower.includes("maxattemptsreached")) return "This wallet has used all commit attempts.";
   if (lower.includes("badcommitfee")) return "The commit fee changed. Refresh and try again.";
   if (lower.includes("baddiceresult")) return "The dice result is invalid. Please roll again.";
-  if (lower.includes("badmintpayment")) return "The mint payment does not match the dice result. Refresh and try again.";
+  if (lower.includes("badmintpayment")) return "The mint payment does not match the fixed mint price. Refresh and try again.";
   if (lower.includes("badsignature")) return "The roll signature could not be verified. Please roll again.";
   if (lower.includes("messageused")) return "This signed roll has already been used.";
   if (lower.includes("nonceused")) return "This roll nonce has already been used.";

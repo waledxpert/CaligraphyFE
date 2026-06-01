@@ -236,10 +236,10 @@ export class MintProvider extends React.Component {
     this.setState({ phase: "minting" });
 
     try {
-      const mintPayment = mintPrice * BigInt(roll.diceResult);
+      const mintPayment = mintPrice;
       if (walletBalance < mintPayment) {
         throw new Error(
-          `Insufficient Sepolia ETH. Mint needs ${ethers.formatEther(mintPayment)} ETH plus gas for ${roll.diceResult} NFTs, wallet has ${ethers.formatEther(walletBalance)} ETH.`
+          `Insufficient Sepolia ETH. Mint needs ${ethers.formatEther(mintPayment)} ETH plus gas, wallet has ${ethers.formatEther(walletBalance)} ETH.`
         );
       }
 
@@ -405,7 +405,7 @@ const CONTRACT_ERROR_COPY = {
   AlreadyMinted: "This wallet has already minted.",
   BadCommitFee: "The commit fee changed. Refresh and try again.",
   BadDiceResult: "The dice result is invalid. Please roll again.",
-  BadMintPayment: "The mint payment does not match the dice result. Refresh and try again.",
+  BadMintPayment: "The mint payment does not match the fixed mint price. Refresh and try again.",
   BadSignature: "The roll signature could not be verified. Please roll again.",
   InvalidTransferValidatorContract: "The transfer validator address is invalid.",
   MaxAttemptsReached: "This wallet has used all commit attempts.",
