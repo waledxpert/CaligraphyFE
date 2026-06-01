@@ -1,0 +1,263 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Now";
+  src: url("../now/Now-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Now";
+  src: url("../now/Now-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Now";
+  src: url("../now/Now-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Drybrush";
+  src: url("../drybrush/Drybrush.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  font-family: "Now", ui-sans-serif, system-ui, sans-serif;
+  background: #f5efe3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f5efe3;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(182, 51, 38, 0.72) rgba(49, 33, 22, 0.08);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(49, 33, 22, 0.08);
+  border-left: 1px solid rgba(182, 51, 38, 0.12);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#b63326, #7f251d);
+  border: 2px solid #f5efe3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8f2b22;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+svg {
+  display: block;
+}
+
+.paper-surface {
+  background:
+    linear-gradient(rgba(182, 51, 38, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(182, 51, 38, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.5), transparent 26rem),
+    radial-gradient(circle at 84% 80%, rgba(182, 51, 38, 0.08), transparent 25rem),
+    #f5efe3;
+  background-size: 42px 42px, 42px 42px, auto, auto, auto;
+}
+
+.background-kanji {
+  @apply pointer-events-none fixed z-0 select-none font-display text-[33vw] leading-none text-cinnabar/10;
+}
+
+.ledger-panel {
+  @apply relative border-b border-ink/10 backdrop-blur-sm lg:border-b-0 lg:border-r;
+  background-color: rgba(245, 239, 227, 0.72);
+}
+
+.ledger-card {
+  @apply rounded-sm border border-ink/10 p-4 shadow-panel backdrop-blur;
+  background-color: rgba(251, 247, 237, 0.72);
+}
+
+.ledger-tile {
+  @apply rounded-sm border border-ink/10 p-4;
+  background-color: rgba(251, 247, 237, 0.58);
+}
+
+.seal-mark {
+  @apply grid h-12 w-12 place-items-center bg-cinnabar font-display text-3xl leading-none text-paper shadow-sm;
+  box-shadow: inset 0 0 0 2px rgba(245, 239, 227, 0.45), 0 10px 22px rgba(95, 31, 24, 0.18);
+}
+
+.mini-stamp {
+  @apply grid h-7 w-7 place-items-center bg-cinnabar font-display text-lg leading-none text-paper;
+  box-shadow: inset 0 0 0 1px rgba(245, 239, 227, 0.45);
+}
+
+.supply-bar {
+  @apply rounded-sm border border-cinnabar/30 bg-cinnabar/10 px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-cinnabar;
+}
+
+.flow-step {
+  @apply flex h-14 items-center gap-3 rounded-sm border border-ink/10 px-3 text-sm font-black text-ink/45 transition;
+  background-color: rgba(245, 239, 227, 0.65);
+}
+
+.flow-step span {
+  @apply grid h-7 w-7 place-items-center rounded-sm border border-ink/15 font-mono text-xs;
+}
+
+.flow-step.is-active {
+  @apply border-cinnabar/30 bg-cinnabar/10 text-cinnabar;
+}
+
+.flow-step.is-done span {
+  @apply border-jade/30 bg-jade/10 text-jade;
+}
+
+.wallet-ledger {
+  @apply grid gap-2 rounded-sm border border-cinnabar/20 bg-cinnabar/5 p-3 sm:grid-cols-3;
+}
+
+.wallet-ledger div {
+  @apply min-w-0 border-l-2 border-cinnabar/35 pl-3;
+}
+
+.wallet-ledger span {
+  @apply block truncate text-[0.66rem] font-black uppercase tracking-[0.16em] text-ink/45;
+}
+
+.wallet-ledger strong {
+  @apply mt-1 block truncate font-mono text-sm font-black text-ink;
+}
+
+.dice-count-button {
+  @apply grid h-11 place-items-center rounded-sm border border-ink/10 text-sm font-black text-ink/60 transition hover:border-cinnabar hover:text-cinnabar disabled:cursor-not-allowed disabled:opacity-50;
+  background-color: #f5efe3;
+}
+
+.dice-count-button.is-selected {
+  @apply border-cinnabar bg-cinnabar text-paper;
+}
+
+.toast {
+  @apply fixed left-4 right-4 top-4 z-50 mx-auto flex max-w-xl items-center gap-3 rounded-sm border px-4 py-3 text-sm font-bold shadow-panel sm:left-auto sm:right-6 sm:mx-0;
+}
+
+.toast button {
+  @apply ml-auto grid h-7 w-7 shrink-0 place-items-center rounded-sm border border-current opacity-80;
+}
+
+.toast-success,
+.toast-info {
+  @apply border-jade/25 bg-[#eef7f1] text-jade;
+}
+
+.toast-error {
+  @apply border-cinnabar/25 bg-[#fff0ed] text-cinnabar;
+}
+
+.status-drawer {
+  @apply fixed bottom-0 left-3 z-40 w-[calc(100vw-1.5rem)] translate-y-[calc(100%-2.75rem)] transition-transform duration-300 sm:left-auto sm:right-4 sm:w-[min(26rem,calc(100vw-2rem))];
+}
+
+.status-drawer.is-open {
+  @apply translate-y-0;
+}
+
+.status-drawer-tab {
+  @apply ml-auto flex h-11 items-center gap-2 rounded-t-sm border border-b-0 border-cinnabar/30 bg-cinnabar px-4 text-sm font-black text-paper shadow-panel;
+}
+
+.status-drawer-panel {
+  @apply rounded-tl-sm border border-cinnabar/25 bg-paper-light/95 p-4 shadow-panel backdrop-blur;
+}
+
+.caligraph-scroll {
+  scrollbar-gutter: stable;
+}
+
+.modal-backdrop {
+  @apply fixed inset-0 z-50 grid place-items-end bg-ink/35 p-4 backdrop-blur-sm sm:place-items-center;
+}
+
+.wallet-modal {
+  @apply w-full max-w-md rounded-sm border border-cinnabar/25 bg-paper-light/95 p-4 shadow-panel;
+}
+
+.primary-button {
+  @apply inline-flex h-14 w-full items-center justify-center gap-3 rounded-sm bg-ink px-5 text-base font-black text-rice transition hover:bg-night disabled:cursor-not-allowed disabled:opacity-55;
+}
+
+.secondary-button {
+  @apply inline-flex h-10 shrink-0 items-center justify-center rounded-sm bg-ink px-4 text-sm font-black text-rice transition hover:bg-night;
+}
+
+.icon-button {
+  @apply inline-flex h-10 max-w-[190px] items-center justify-center gap-2 rounded-sm border border-ink/15 bg-paper-light/75 px-3 text-sm font-bold text-ink transition hover:border-ink/35;
+}
+
+.wallet-trigger {
+  @apply inline-grid h-10 w-10 shrink-0 place-items-center rounded-sm border border-ink/15 bg-paper-light/75 text-ink transition hover:border-cinnabar hover:text-cinnabar sm:inline-flex sm:w-auto sm:max-w-[190px] sm:gap-2 sm:px-3 sm:text-sm sm:font-bold;
+}
+
+.wallet-trigger span {
+  @apply hidden truncate sm:inline;
+}
+
+.square-button {
+  @apply inline-grid h-10 w-10 shrink-0 place-items-center rounded-sm border border-ink/15 bg-paper-light/75 text-ink transition hover:border-cinnabar hover:text-cinnabar;
+}
+
+.icon-button span {
+  @apply truncate;
+}
+
+.icon-link {
+  @apply inline-flex items-center gap-2 rounded-sm border border-ink/15 bg-paper-light px-3 py-2 text-sm font-bold text-ink transition hover:border-cinnabar hover:text-cinnabar;
+}
+
+.notice {
+  @apply rounded-sm border border-gold/35 bg-gold/10 px-3 py-2 text-sm font-semibold text-ink/70;
+}
+
+.empty-state {
+  @apply grid min-h-[150px] place-items-center rounded-sm border border-dashed border-ink/25 bg-paper-light/50 px-4 py-8 text-center text-sm font-semibold text-ink/45;
+}
+
+.token-card {
+  @apply rounded-sm border border-ink/10 bg-paper-light p-3 shadow-sm;
+}
+
+.token-card svg {
+  width: 100%;
+  height: 100%;
+}
