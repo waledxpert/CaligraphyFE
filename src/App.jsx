@@ -459,6 +459,9 @@ function statusTitle(phase, diceResult) {
 
 function shapeError(message) {
   const lower = message.toLowerCase();
+  if (lower.includes("too many") || lower.includes("rate limit") || lower.includes("429")) return "Too many roll requests. Please wait a minute and try again.";
+  if (lower.includes("timeout") || lower.includes("timed out") || lower.includes("aborted")) return "The roll request timed out. Please try again.";
+  if (lower.includes("failed to fetch") || lower.includes("networkerror")) return "Could not reach the roll server. Please check your connection and try again.";
   if (lower.includes("insufficient")) return message;
   if (lower.includes("already") || lower.includes("minted")) return "This wallet has already minted.";
   if (lower.includes("maxattemptsreached")) return "This wallet has used all commit attempts.";

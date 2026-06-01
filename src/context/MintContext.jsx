@@ -216,7 +216,10 @@ export class MintProvider extends React.Component {
 
       if (!response.ok) {
         const body = await response.json().catch(() => null);
-        throw new Error(body?.error || "Backend roll failed");
+        if (response.status === 429) {
+          throw new Error(body?.error || "ROLL_RATE_LIMITED");
+        }
+        throw new Error(body?.error || `Backend roll failed (${response.status})`);
       }
 
       const roll = await response.json();
@@ -340,7 +343,31 @@ function readableError(error) {
     error?.message ||
     "Something went wrong";
 
-  return message.replace(/^execution reverted: /i, "");
+  return normalizeOperationalError(message.replace(/^execution reverted: /i, ""));
+}
+
+function normalizeOperationalError(message) {
+  const lower = message.toLowerCase();
+  if (
+    message === "ROLL_RATE_LIMITED" ||
+    lower.includes("rate limit") ||
+    lower.includes("too many requests") ||
+    lower.includes("429")
+  ) {
+    return "Too many roll requests. Please wait a minute and try again.";
+  }
+  if (
+    lower.includes("timeout") ||
+    lower.includes("timed out") ||
+    lower.includes("aborted") ||
+    lower.includes("request_timeout")
+  ) {
+    return "The roll request timed out. Please try again.";
+  }
+  if (lower.includes("failed to fetch") || lower.includes("networkerror")) {
+    return "Could not reach the roll server. Please check your connection and try again.";
+  }
+  return message;
 }
 
 function contractErrorName(error) {
