@@ -3,10 +3,10 @@ import * as THREE from "three";
 
 const FACE_ROTATIONS = {
   1: [0, 0, 0],
-  2: [0, 0, -Math.PI / 2],
-  3: [0, Math.PI / 2, 0],
-  4: [0, -Math.PI / 2, 0],
-  5: [0, 0, Math.PI / 2],
+  2: [0, 0, Math.PI / 2],
+  3: [-Math.PI / 2, 0, 0],
+  4: [Math.PI / 2, 0, 0],
+  5: [0, 0, -Math.PI / 2],
   6: [Math.PI, 0, 0]
 };
 
@@ -91,7 +91,9 @@ export default class DiceScene extends React.Component {
     red.position.set(-3, 2, 4);
     this.scene.add(red);
 
-    const materials = [3, 4, 2, 5, 1, 6].map(createFaceMaterial);
+    // BoxGeometry material order is +x, -x, +y, -y, +z, -z.
+    // This maps dice values to right, left, top, bottom, front, back.
+    const materials = [2, 5, 1, 6, 3, 4].map(createFaceMaterial);
     this.die = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.8, 1.8, 6, 6, 6), materials);
     this.die.castShadow = true;
     this.die.receiveShadow = true;
