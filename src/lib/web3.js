@@ -87,10 +87,21 @@ async function fetchOwnedTokenIdsByOwnerScan(contract, owner, totalMinted) {
   const maxTokenId = Number(totalMinted || 0n);
   if (!maxTokenId) return [];
 
+  const newestWindowStart = Math.max(1, maxTokenId - 250);
+  const newestOwned = await scanOwnerRange(contract, owner, newestWindowStart, maxTokenId);
+  if (newestOwned.length > 0) return newestOwned;
+
+  // Last resort for older mints. The contract caps at 10k, but keep this bounded
+  // to avoid surprise RPC floods if a provider cannot serve historical logs.
+  if (maxTokenId > 1000) return [];
+  return scanOwnerRange(contract, owner, 1, maxTokenId);
+}
+
+async function scanOwnerRange(contract, owner, startTokenId, endTokenId) {
   const owned = [];
   const batchSize = 40;
-  for (let start = 1; start <= maxTokenId; start += batchSize) {
-    const end = Math.min(start + batchSize - 1, maxTokenId);
+  for (let start = startTokenId; start <= endTokenId; start += batchSize) {
+    const end = Math.min(start + batchSize - 1, endTokenId);
     const batch = [];
     for (let tokenId = start; tokenId <= end; tokenId++) {
       batch.push(
