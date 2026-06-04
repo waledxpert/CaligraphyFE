@@ -32,16 +32,25 @@ export class MintProvider extends React.Component {
     error: ""
   };
 
-  componentDidMount() {
-    if (!window.ethereum) return;
-    window.ethereum.on?.("accountsChanged", this.connect);
-    window.ethereum.on?.("chainChanged", this.connect);
-  }
+  componentDidUpdate(prevProps) {
+    const previous = prevProps.walletAdapter || {};
+    const current = this.props.walletAdapter || {};
+    const connectedWalletChanged =
+      current.isConnected &&
+      current.walletClient &&
+      (
+        previous.address !== current.address ||
+        previous.chainId !== current.chainId ||
+        previous.walletClient !== current.walletClient
+      );
 
-  componentWillUnmount() {
-    if (!window.ethereum) return;
-    window.ethereum.removeListener?.("accountsChanged", this.connect);
-    window.ethereum.removeListener?.("chainChanged", this.connect);
+    if (connectedWalletChanged) {
+      this.connect();
+    }
+
+    if (previous.isConnected && !current.isConnected && this.state.client) {
+      this.resetWalletState();
+    }
   }
 
   get contractReady() {
@@ -75,7 +84,13 @@ export class MintProvider extends React.Component {
     if (!this.contractReady) return;
 
     try {
-      const client = await getWalletClient();
+      const walletAdapter = this.props.walletAdapter || {};
+      if (walletAdapter.openConnectModal && !walletAdapter.walletClient) {
+        walletAdapter.openConnectModal();
+        return;
+      }
+
+      const client = await getWalletClient(walletAdapter.walletClient);
       this.setState({ client, chainId: client.chainId }, () => this.refresh(client));
     } catch (error) {
       this.setState({ error: readableError(error) });
@@ -83,6 +98,11 @@ export class MintProvider extends React.Component {
   };
 
   disconnect = () => {
+    this.props.walletAdapter?.disconnect?.();
+    this.resetWalletState();
+  };
+
+  resetWalletState = () => {
     this.setState({
       client: null,
       chainId: null,
@@ -165,10 +185,14 @@ export class MintProvider extends React.Component {
 
   switchNetwork = async () => {
     try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: `0x${APP_CONFIG.chainId.toString(16)}` }]
-      });
+      if (this.props.walletAdapter?.switchChain) {
+        await this.props.walletAdapter.switchChain(APP_CONFIG.chainId);
+      } else {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${APP_CONFIG.chainId.toString(16)}` }]
+        });
+      }
       await this.connect();
     } catch (error) {
       this.setState({ error: readableError(error) });
@@ -303,7 +327,7 @@ export class MintProvider extends React.Component {
           isWrongChain: this.isWrongChain,
           isBusy: this.isBusy,
           primaryState: this.primaryState,
-          hasWallet: hasWallet(),
+          hasWallet: hasWallet() || Boolean(this.props.walletAdapter?.openConnectModal),
           connect: this.connect,
           disconnect: this.disconnect,
           switchNetwork: this.switchNetwork,

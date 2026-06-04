@@ -1,8 +1,14 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "@rainbow-me/rainbowkit/styles.css";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
+import { walletAppInfo, walletConfig } from "./walletConfig";
 import "./styles.css";
 
 const rootElement = document.getElementById("root");
+const queryClient = new QueryClient();
 
 window.addEventListener("error", (event) => {
   if (isIgnoredRuntimeNoise(event.message)) {
@@ -23,9 +29,24 @@ window.addEventListener("unhandledrejection", (event) => {
 import("./App.jsx")
   .then(({ default: App }) => {
     createRoot(rootElement).render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      <WagmiProvider config={walletConfig}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider
+            appInfo={walletAppInfo}
+            modalSize="compact"
+            theme={darkTheme({
+              accentColor: "#b63326",
+              accentColorForeground: "#f8f2e7",
+              borderRadius: "small",
+              fontStack: "system"
+            })}
+          >
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     );
   })
   .catch(showBootError);

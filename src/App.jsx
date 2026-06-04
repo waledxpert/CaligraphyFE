@@ -1,4 +1,6 @@
 import React, { Component, Suspense, lazy } from "react";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useDisconnect, useSwitchChain, useWalletClient } from "wagmi";
 import {
   AlertTriangle,
   ChevronDown,
@@ -41,12 +43,31 @@ const actionCopy = {
 
 export default class App extends Component {
   render() {
-    return (
-      <MintProvider>
-        <MintConsumer>{(mint) => <AppShell mint={mint} />}</MintConsumer>
-      </MintProvider>
-    );
+    return <WalletBridge />;
   }
+}
+
+function WalletBridge() {
+  const { address, chainId, isConnected } = useAccount();
+  const { data: walletClient } = useWalletClient();
+  const { disconnect } = useDisconnect();
+  const { openConnectModal } = useConnectModal();
+  const { switchChainAsync } = useSwitchChain();
+  const walletAdapter = {
+    address,
+    chainId,
+    isConnected,
+    walletClient,
+    openConnectModal,
+    disconnect,
+    switchChain: (targetChainId) => switchChainAsync({ chainId: targetChainId })
+  };
+
+  return (
+    <MintProvider walletAdapter={walletAdapter}>
+      <MintConsumer>{(mint) => <AppShell mint={mint} />}</MintConsumer>
+    </MintProvider>
+  );
 }
 
 class AppShell extends Component {

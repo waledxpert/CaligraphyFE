@@ -6,7 +6,11 @@ export function hasWallet() {
   return Boolean(window.ethereum);
 }
 
-export async function getWalletClient() {
+export async function getWalletClient(walletClient) {
+  if (walletClient) {
+    return getWalletClientFromViem(walletClient);
+  }
+
   if (!hasWallet()) {
     throw new Error("No injected wallet found. Install MetaMask or another EVM wallet.");
   }
@@ -14,6 +18,21 @@ export async function getWalletClient() {
   const provider = new ethers.BrowserProvider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
+  const network = await provider.getNetwork();
+  const contract = new ethers.Contract(APP_CONFIG.contractAddress, financialCalligraphyAbi, signer);
+
+  return {
+    provider,
+    signer,
+    contract,
+    address: await signer.getAddress(),
+    chainId: Number(network.chainId)
+  };
+}
+
+async function getWalletClientFromViem(walletClient) {
+  const provider = new ethers.BrowserProvider(walletClient.transport, walletClient.chain?.id);
+  const signer = await provider.getSigner(walletClient.account.address);
   const network = await provider.getNetwork();
   const contract = new ethers.Contract(APP_CONFIG.contractAddress, financialCalligraphyAbi, signer);
 
