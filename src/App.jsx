@@ -126,7 +126,7 @@ class AppShell extends Component {
                   <p className="text-xs font-black uppercase tracking-[0.22em] text-ink/50">Financial calligraphy</p>
                 </div>
               </div>
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <button
                   className="wallet-trigger"
                   onClick={this.openWalletModal}
@@ -137,7 +137,7 @@ class AppShell extends Component {
                   <span>{mint.client ? shortAddress(mint.client.address) : "Connect"}</span>
                 </button>
                 {mint.client ? (
-                  <button className="square-button hidden sm:inline-grid" onClick={mint.disconnect} title="Disconnect wallet" type="button">
+                  <button className="hidden square-button sm:inline-grid" onClick={mint.disconnect} title="Disconnect wallet" type="button">
                     <LogOut size={18} />
                   </button>
                 ) : null}
@@ -173,9 +173,9 @@ class AppShell extends Component {
                   <Price label="Wallet balance" value={mint.walletBalance} />
                   <Price label="Mint payment" value={mint.mintPrice} />
                 </div>
-                <p className="fixed-price-note">
+                {/* <p className="fixed-price-note">
                   Mint price is fixed. You pay the same amount whether the die rolls 1 or 6.
-                </p>
+                </p> */}
                 <button
                   className="primary-button"
                   disabled={mint.isBusy || mint.primaryState === "unconfigured" || mint.primaryState === "minted" || !mint.hasWallet}
@@ -267,16 +267,16 @@ function WalletModal({ mint, onClose, onConnect, onCopy, open }) {
             </div>
             {mint.client ? (
               <>
-                <div className="mt-4 break-all rounded-sm bg-paper/80 p-3 font-mono text-xs font-black text-ink/70">
+                <div className="p-3 mt-4 font-mono text-xs font-black break-all rounded-sm bg-paper/80 text-ink/70">
                   {mint.client.address}
                 </div>
-                <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 mt-4">
                   <button className="secondary-button" onClick={onCopy} type="button"><Copy size={16} />Copy</button>
                   <button className="secondary-button" onClick={mint.disconnect} type="button"><LogOut size={16} />Disconnect</button>
                 </div>
               </>
             ) : (
-              <button className="primary-button mt-4" onClick={onConnect} type="button">
+              <button className="mt-4 primary-button" onClick={onConnect} type="button">
                 <Wallet size={18} />
                 Connect Wallet
               </button>
